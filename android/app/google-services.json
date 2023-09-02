@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "614570044589",
+    "project_id": "ghfdhdfhsgsgsgr",
+    "storage_bucket": "ghfdhdfhsgsgsgr.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:614570044589:android:0c1acbf4aeb34a2da46a24",
+        "android_client_info": {
+          "package_name": "com.hima.diaryx"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "614570044589-e65hrmo0v7a8d7lid1viv3he185jbrf8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJO08-iCEvBFfoM9QsBau8SbeXIjgjNBQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "614570044589-e65hrmo0v7a8d7lid1viv3he185jbrf8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

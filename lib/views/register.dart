@@ -1,4 +1,6 @@
+import 'package:diaryx/components/mytextfield.dart';
 import 'package:diaryx/firebase_options.dart';
+import 'package:diaryx/views/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -29,43 +31,48 @@ class _MyWidgetState extends State<RegisterationView> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        TextField(
-          controller: email,
-          decoration: const InputDecoration(hintText: "Enter your Email"),
-          enableSuggestions: false,
-          autocorrect: false,
-          keyboardType: TextInputType.emailAddress,
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            const SizedBox(height: 300),
+            MyTextField(
+                controller1: email,
+                hinttext: "Please Enter Your Email",
+                obsecuretext: false),
+            MyTextField(
+                controller1: pass,
+                hinttext: "Enter your Password",
+                obsecuretext: true),
+            TextButton(
+              onPressed: () async {
+                final e = email.text.trim();
+                final p = pass.text.trim();
+                try {
+                  final usercan = await FirebaseAuth.instance
+                      .createUserWithEmailAndPassword(email: e, password: p);
+                  print(usercan);
+                } on FirebaseAuthException catch (e) {
+                  if (e.code == 'weak-password') {
+                    print("Weak password");
+                  } else if (e.code == 'email-already-in-use') {
+                    print("Email already in use");
+                  } else if (e.code == 'invalid-email') {
+                    print('Email is invalid');
+                  }
+                }
+              },
+              child: const Text("Register"),
+            ),
+            TextButton(
+                onPressed: () {
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, "/login/", (route) => false);
+                },
+                child: const Text("already has an Email"))
+          ],
         ),
-        TextField(
-          controller: pass,
-          decoration: const InputDecoration(hintText: "Enter password"),
-          enableSuggestions: false,
-          obscureText: true,
-          autocorrect: false,
-        ),
-        TextButton(
-          onPressed: () async {
-            final e = email.text;
-            final p = pass.text;
-            try {
-              final usercan = await FirebaseAuth.instance
-                  .createUserWithEmailAndPassword(email: e, password: p);
-              print(usercan);
-            } on FirebaseAuthException catch (e) {
-              if (e.code == 'weak-password') {
-                print("Weak password");
-              } else if (e.code == 'email-already-in-use') {
-                print("Email already in use");
-              } else if (e.code == 'invalid-email') {
-                print('Email is invalid');
-              }
-            }
-          },
-          child: const Text("Register"),
-        ),
-      ],
+      ),
     );
   }
 }

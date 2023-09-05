@@ -23,9 +23,13 @@ class MyTextField extends StatelessWidget {
             border: const OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(8.0)),
             ),
+            enabledBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.white)),
             focusedBorder: const OutlineInputBorder(
               borderSide: BorderSide(color: Colors.grey),
-            )),
+            ),
+            fillColor: Colors.grey.shade300,
+            filled: true),
         enableSuggestions: false,
         obscureText: obsecuretext,
         autocorrect: false,

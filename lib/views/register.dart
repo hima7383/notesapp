@@ -1,8 +1,5 @@
 import 'package:diaryx/components/mytextfield.dart';
-import 'package:diaryx/firebase_options.dart';
-import 'package:diaryx/views/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 class RegisterationView extends StatefulWidget {

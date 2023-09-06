@@ -1,4 +1,5 @@
 import 'package:diaryx/firebase_options.dart';
+import 'package:diaryx/notesview.dart';
 import 'package:diaryx/views/EmailVerify.dart';
 import 'package:diaryx/views/login.dart';
 import 'package:diaryx/views/register.dart';
@@ -39,12 +40,14 @@ class HomePage extends StatelessWidget {
             final user = FirebaseAuth.instance.currentUser;
             if (user != null) {
               if (user.emailVerified) {
-                print("is vef");
-              } else
-                return VerfiyEmail();
-            } else
-              return RegisterationView();
-            return const Text("done");
+                return const Notesview();
+              } else {
+                return const VerfiyEmail();
+              }
+            } else {
+              return const RegisterationView();
+            }
+
           default:
             return const Text("Loading...");
         }

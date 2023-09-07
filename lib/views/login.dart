@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:diaryx/components/mytextfield.dart';
+import 'package:diaryx/constants/routs.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -59,7 +60,7 @@ class _HomePageState extends State<LoginView> {
 
                 log(usercan.toString());
                 Navigator.of(context).pushNamedAndRemoveUntil(
-                  "/notes/",
+                  notesRout,
                   (route) => false,
                 );
               } on FirebaseAuthException catch (e) {
@@ -78,7 +79,7 @@ class _HomePageState extends State<LoginView> {
           TextButton(
             onPressed: () {
               Navigator.pushNamedAndRemoveUntil(
-                  context, "/register/", (_) => false);
+                  context, reigsterRout, (_) => false);
             },
             style: TextButton.styleFrom(
                 shape: RoundedRectangleBorder(

@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:diaryx/components/mytextfield.dart';
+import 'package:diaryx/constants/routs.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -66,7 +67,7 @@ class _MyWidgetState extends State<RegisterationView> {
             TextButton(
                 onPressed: () {
                   Navigator.pushNamedAndRemoveUntil(
-                      context, "/login/", (route) => false);
+                      context, loginRout, (route) => false);
                 },
                 child: const Text("already has an Email"))
           ],

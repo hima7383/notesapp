@@ -1,5 +1,6 @@
+import 'package:diaryx/constants/routs.dart';
 import 'package:diaryx/firebase_options.dart';
-import 'package:diaryx/notesview.dart';
+import 'package:diaryx/views/notesview.dart';
 import 'package:diaryx/views/EmailVerify.dart';
 import 'package:diaryx/views/login.dart';
 import 'package:diaryx/views/register.dart';
@@ -18,9 +19,9 @@ void main() {
       ),
       home: const HomePage(),
       routes: {
-        '/login/': (context) => const LoginView(),
-        '/register/': (context) => const RegisterationView(),
-        '/notes/': (context) => const Notesview(),
+        loginRout: (context) => const LoginView(),
+        reigsterRout: (context) => const RegisterationView(),
+        notesRout: (context) => const Notesview(),
       },
     ),
   );

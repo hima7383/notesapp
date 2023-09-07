@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:diaryx/components/mytextfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -30,9 +32,10 @@ class _HomePageState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.shade300,
       body: Column(
         children: [
-          const SizedBox(height: 50),
+          const SizedBox(height: 100),
           MyTextField(
               controller1: email,
               hinttext: "Enter your Email",
@@ -44,20 +47,26 @@ class _HomePageState extends State<LoginView> {
               obsecuretext: true),
           TextButton(
             onPressed: () async {
-              final e = email.text;
-              final p = pass.text;
-              print(e);
+              final e = email.text.trim();
+              final p = pass.text.trim();
+              log(e);
               try {
-                final usercan = await FirebaseAuth.instance
-                    .signInWithEmailAndPassword(
-                        email: email.text.trim(), password: p.trim());
+                final usercan =
+                    await FirebaseAuth.instance.signInWithEmailAndPassword(
+                  email: email.text.trim(),
+                  password: p.trim(),
+                );
 
-                print(usercan);
+                log(usercan.toString());
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                  "/notes/",
+                  (route) => false,
+                );
               } on FirebaseAuthException catch (e) {
                 if (e.code == 'user-not-found') {
-                  print("User not found");
+                  log("User not found");
                 } else if (e.code == "wrong-password") {
-                  print("Wrong password");
+                  log("Wrong password");
                 }
               }
             },
@@ -69,7 +78,7 @@ class _HomePageState extends State<LoginView> {
           TextButton(
             onPressed: () {
               Navigator.pushNamedAndRemoveUntil(
-                  context, "/register/", (route) => false);
+                  context, "/register/", (_) => false);
             },
             style: TextButton.styleFrom(
                 shape: RoundedRectangleBorder(

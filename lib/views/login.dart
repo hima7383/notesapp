@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:developer';
 
 import 'package:diaryx/components/mytextfield.dart';
@@ -35,17 +37,25 @@ class _HomePageState extends State<LoginView> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.grey.shade300,
-        body: Container(
-          /* decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(
-                  "assets/images/retrosupply-jLwVAUtLOAQ-unsplash.jpg"),
-              fit: BoxFit.cover,
-            ),
-          ),*/
-          child: ListView(
+        body: /* Container(
+            height: double.infinity,
+            width: double.infinity,
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(
+                    "assets/images/retrosupply-jLwVAUtLOAQ-unsplash.jpg"),
+                fit: BoxFit.cover,
+              ),
+            ),*/
+            SingleChildScrollView(
+          child: Column(
             children: [
-              const SizedBox(height: 250),
+              const SizedBox(height: 90),
+              Text(
+                "Welcome Back!",
+                style: TextStyle(fontSize: 25, color: Colors.grey[700]),
+              ),
+              const SizedBox(height: 110),
               MyTextField(
                   controller1: email,
                   hinttext: "Enter your Email",
@@ -55,7 +65,8 @@ class _HomePageState extends State<LoginView> {
                   controller1: pass,
                   hinttext: "Enter your Password",
                   obsecuretext: true),
-              TextButton(
+              const SizedBox(height: 20),
+              ElevatedButton(
                 onPressed: () async {
                   final e = email.text.trim();
                   final p = pass.text.trim();
@@ -65,11 +76,17 @@ class _HomePageState extends State<LoginView> {
                       email: email.text.trim(),
                       password: p.trim(),
                     );
-
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                      notesRout,
-                      (route) => false,
-                    );
+                    final user = FirebaseAuth.instance.currentUser;
+                    if (user != null) {
+                      if (user.emailVerified) {
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                          notesRout,
+                          (route) => false,
+                        );
+                      } else {
+                        showError(context, "please verify your email first");
+                      }
+                    }
                   } on FirebaseAuthException catch (e) {
                     if (e.code == 'user-not-found') {
                       await showError(
@@ -88,9 +105,14 @@ class _HomePageState extends State<LoginView> {
                     await showError(context, e.toString());
                   }
                 },
+                style: TextButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0)),
+                    backgroundColor: Colors.black,
+                    fixedSize: const Size(300, 50)),
                 child: const Text(
                   "Login",
-                  style: TextStyle(color: Colors.black),
+                  style: TextStyle(color: Colors.white),
                 ),
               ),
               TextButton(
@@ -98,14 +120,11 @@ class _HomePageState extends State<LoginView> {
                   Navigator.pushNamedAndRemoveUntil(
                       context, reigsterRout, (_) => false);
                 },
-                style: TextButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0))),
                 child: const Text(
                   "Register an Email",
                   style: TextStyle(color: Colors.black),
                 ),
-              )
+              ),
             ],
           ),
         ));

@@ -1,7 +1,6 @@
 import 'package:diaryx/constants/routs.dart';
 import 'package:diaryx/firebase_options.dart';
 import 'package:diaryx/views/notesview.dart';
-import 'package:diaryx/views/EmailVerify.dart';
 import 'package:diaryx/views/login.dart';
 import 'package:diaryx/views/register.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -44,7 +43,8 @@ class HomePage extends StatelessWidget {
               if (user.emailVerified) {
                 return const Notesview();
               } else {
-                return const VerfiyEmail();
+                //showError(context, "please verify your Email before loging in");
+                return const LoginView();
               }
             } else {
               return const RegisterationView();

@@ -18,17 +18,17 @@ class MyTextField extends StatelessWidget {
         textAlign: TextAlign.center,
         controller: controller1,
         decoration: InputDecoration(
-          hintText: hinttext,
-          border: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(8.0)),
-          ),
-          enabledBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.white)),
-          focusedBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.white),
-          ),
-          fillColor: Colors.grey.shade100,
-        ),
+            hintText: hinttext,
+            border: const OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(8.0)),
+            ),
+            enabledBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.white)),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.grey.shade400),
+            ),
+            fillColor: Colors.grey.shade200,
+            filled: true),
         enableSuggestions: false,
         obscureText: obsecuretext,
         autocorrect: false,

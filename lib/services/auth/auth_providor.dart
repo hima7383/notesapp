@@ -1,6 +1,7 @@
 import 'package:diaryx/services/auth/auth_user.dart';
 
 abstract class AuthProvidor {
+  Future<void> initializer();
   AuthUser? get currentUser;
   Future<AuthUser> logIn({
     required String email,

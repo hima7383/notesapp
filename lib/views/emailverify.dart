@@ -1,6 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:diaryx/services/auth/auth_service.dart';
 
 void verfiyEmail() async {
-  final user = FirebaseAuth.instance.currentUser;
-  await user?.sendEmailVerification();
+  return AuthService.firebase().sendEmailVerification();
 }

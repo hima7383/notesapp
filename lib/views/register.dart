@@ -2,10 +2,11 @@
 
 import 'package:diaryx/components/mytextfield.dart';
 import 'package:diaryx/constants/routs.dart';
+import 'package:diaryx/services/auth/auth_exceptions.dart';
+import 'package:diaryx/services/auth/auth_service.dart';
 import 'package:diaryx/utilites/errordialogs.dart';
 import 'package:diaryx/utilites/noticedialog.dart';
 import 'package:diaryx/views/emailverify.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class RegisterationView extends StatefulWidget {
@@ -60,34 +61,27 @@ class _MyWidgetState extends State<RegisterationView> {
                 final e = email.text.trim();
                 final p = pass.text.trim();
                 try {
-                  await FirebaseAuth.instance
-                      .createUserWithEmailAndPassword(email: e, password: p);
+                  await AuthService.firebase()
+                      .createUser(email: e, password: p);
                   verfiyEmail();
                   showWindow(
                       context,
                       "We have sent an Email verfication link check your inbox or spam folder",
                       "registration success");
-                } on FirebaseAuthException catch (e) {
-                  if (e.code == 'weak-password') {
-                    showError(
-                      context,
-                      "Weak password",
-                    );
-                  } else if (e.code == 'email-already-in-use') {
-                    showError(
-                      context,
-                      "Email already in use",
-                    );
-                  } else if (e.code == 'invalid-email') {
-                    showError(
-                      context,
-                      'Email is invalid',
-                    );
-                  }
-                } catch (e) {
+                } on WeakPasswordAuthException {
                   showError(
                     context,
-                    e.toString(),
+                    "Weak password",
+                  );
+                } on InvalidEmailAuthException {
+                  showError(
+                    context,
+                    'Email is invalid',
+                  );
+                } on GenericAuthException {
+                  showError(
+                    context,
+                    "Faild to Register",
                   );
                 }
               },

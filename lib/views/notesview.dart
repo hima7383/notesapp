@@ -1,4 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:diaryx/services/auth/auth_service.dart';
 import 'package:flutter/material.dart';
 
 enum Popupmenuaction {
@@ -25,7 +25,7 @@ class _NotesviewState extends State<Notesview> {
                 case Popupmenuaction.logout:
                   final userlogout = await showlogOutdialog(context);
                   if (userlogout) {
-                    await FirebaseAuth.instance.signOut();
+                    await AuthService.firebase().logOut();
                     Navigator.of(context)
                         .pushNamedAndRemoveUntil("/login/", (_) => false);
                   }

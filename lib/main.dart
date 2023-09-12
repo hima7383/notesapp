@@ -1,10 +1,8 @@
 import 'package:diaryx/constants/routs.dart';
-import 'package:diaryx/firebase_options.dart';
+import 'package:diaryx/services/auth/auth_service.dart';
 import 'package:diaryx/views/notesview.dart';
 import 'package:diaryx/views/login.dart';
 import 'package:diaryx/views/register.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -32,15 +30,13 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: Firebase.initializeApp(
-        options: DefaultFirebaseOptions.currentPlatform,
-      ),
+      future: AuthService.firebase().initializer(),
       builder: (context, snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.done:
-            final user = FirebaseAuth.instance.currentUser;
+            final user = AuthService.firebase().currentUser;
             if (user != null) {
-              if (user.emailVerified) {
+              if (user.isEmailVerfied) {
                 return const Notesview();
               } else {
                 //showError(context, "please verify your Email before loging in");

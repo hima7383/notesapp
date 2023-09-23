@@ -1,7 +1,6 @@
 import 'package:diaryx/services/auth/auth_exceptions.dart';
 import 'package:diaryx/services/auth/auth_providor.dart';
 import 'package:diaryx/services/auth/auth_user.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:test/test.dart';
 
 void main() {

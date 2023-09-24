@@ -1,4 +1,5 @@
 import 'package:diaryx/services/auth/auth_service.dart';
+import 'package:diaryx/services/crud/notes_services.dart';
 import 'package:flutter/material.dart';
 
 enum Popupmenuaction {
@@ -13,6 +14,21 @@ class Notesview extends StatefulWidget {
 }
 
 class _NotesviewState extends State<Notesview> {
+  late final NotesService _notesService;
+  String get userEmail => AuthService.firebase().currentUser!.email!;
+
+  @override
+  void initState() {
+    _notesService = NotesService();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _notesService.close();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,6 +55,27 @@ class _NotesviewState extends State<Notesview> {
             },
           )
         ],
+      ),
+      body: FutureBuilder(
+        future: _notesService.getOrCreateUser(email: userEmail),
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.done:
+              return StreamBuilder(
+                stream: _notesService.allNotes,
+                builder: (context, snapshot) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.waiting:
+                      return const Text("waitng for notes");
+                    default:
+                      return const CircularProgressIndicator();
+                  }
+                },
+              );
+            default:
+              return const CircularProgressIndicator();
+          }
+        },
       ),
     );
   }

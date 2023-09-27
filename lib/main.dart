@@ -1,6 +1,7 @@
 import 'package:diaryx/constants/routs.dart';
 import 'package:diaryx/services/auth/auth_service.dart';
-import 'package:diaryx/views/notesview.dart';
+import 'package:diaryx/views/notes/new_note_view.dart';
+import 'package:diaryx/views/notes/notesview.dart';
 import 'package:diaryx/views/login.dart';
 import 'package:diaryx/views/register.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,7 @@ void main() {
         loginRout: (context) => const LoginView(),
         reigsterRout: (context) => const RegisterationView(),
         notesRout: (context) => const Notesview(),
+        newNoteRoute: (context) => const NewNoteView(),
       },
     ),
   );

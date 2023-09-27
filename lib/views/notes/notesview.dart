@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:diaryx/constants/routs.dart';
 import 'package:diaryx/services/auth/auth_service.dart';
 import 'package:diaryx/services/crud/notes_services.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +36,8 @@ class _NotesviewState extends State<Notesview> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Main UI"),
+        backgroundColor: Colors.grey,
+        title: const Text("Your Notes"),
         actions: [
           PopupMenuButton<Popupmenuaction>(
             onSelected: (value) async {
@@ -77,6 +81,14 @@ class _NotesviewState extends State<Notesview> {
           }
         },
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          print("yes");
+          Navigator.of(context).pushNamed(newNoteRoute);
+        },
+        child: const Icon(Icons.add),
+      ),
+      backgroundColor: Colors.grey.shade300,
     );
   }
 }
@@ -87,7 +99,7 @@ Future<bool> showlogOutdialog(BuildContext context) {
     builder: (context) {
       return AlertDialog(
         title: const Text("Sign out"),
-        content: const Text("Are you sure you want to sugn out?"),
+        content: const Text("Are you sure you want to sign out?"),
         actions: [
           TextButton(
               onPressed: () {

@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:diaryx/constants/routs.dart';
 import 'package:diaryx/services/auth/auth_service.dart';
 import 'package:diaryx/services/crud/notes_services.dart';
@@ -70,6 +68,7 @@ class _NotesviewState extends State<Notesview> {
                 builder: (context, snapshot) {
                   switch (snapshot.connectionState) {
                     case ConnectionState.waiting:
+                    case ConnectionState.active:
                       return const Text("waitng for notes");
                     default:
                       return const CircularProgressIndicator();
@@ -83,9 +82,9 @@ class _NotesviewState extends State<Notesview> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          print("yes");
           Navigator.of(context).pushNamed(newNoteRoute);
         },
+        backgroundColor: Colors.white30,
         child: const Icon(Icons.add),
       ),
       backgroundColor: Colors.grey.shade300,

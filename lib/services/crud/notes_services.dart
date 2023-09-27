@@ -7,13 +7,17 @@ import 'package:sqflite/sqflite.dart';
 class NotesService {
   Database? _db;
   static final NotesService _shared = NotesService._sharedInstance();
-  NotesService._sharedInstance();
+  NotesService._sharedInstance() {
+    _notesStreamController =
+        StreamController<List<DatabaseNotes>>.broadcast(onListen: () {
+      _notesStreamController.sink.add(_notes);
+    });
+  }
   factory NotesService() => _shared;
 
   List<DatabaseNotes> _notes = [];
 
-  final _notesStreamController =
-      StreamController<List<DatabaseNotes>>.broadcast();
+  late final StreamController<List<DatabaseNotes>> _notesStreamController;
 
   Stream<List<DatabaseNotes>> get allNotes => _notesStreamController.stream;
 
@@ -123,7 +127,10 @@ class NotesService {
       isSyncedWithCloudCol: 1,
     });
     final note = DatabaseNotes(
-        id: noteid, userID: owner.id, text: text, isSyncedWithCloud: true);
+      id: noteid,
+      userID: owner.id,
+      text: text,
+    );
     _notes.add(note);
     _notesStreamController.add(_notes);
     return note;
@@ -247,19 +254,17 @@ class DatabaseNotes {
   final int id;
   final int userID;
   final String text;
-  final bool isSyncedWithCloud;
 
   DatabaseNotes({
     required this.id,
     required this.userID,
     required this.text,
-    required this.isSyncedWithCloud,
   });
   DatabaseNotes.fromRow(Map<String, Object?> map)
       : id = map[idCol] as int,
         userID = map[userIdCol] as int,
-        text = map[textCol] as String,
-        isSyncedWithCloud = map[isSyncedWithCloudCol] as bool;
+        text = map[textCol] as String;
+  //isSyncedWithCloud = map[isSyncedWithCloudCol] as bool;
   @override
   String toString() {
     return 'Notes, id = $id , Userid = $userID';
@@ -287,9 +292,8 @@ const createUser1 = '''CREATE TABLE IF NOT EXISTS "user" (
     );''';
 const createnote = '''CREATE TABLE IF NOT EXISTS "notes" (
       "id"	INTEGER NOT NULL,
-      "user_id"	INTEGER NOT NULL,
-      "text"	TEXT,
-      "is_syced_with_cloud"	INTEGER NOT NULL,
-      FOREIGN KEY("user_id") REFERENCES "user"("id"),
-      PRIMARY KEY("id" AUTOINCREMENT)
+	"user_id"	INTEGER NOT NULL,
+	"text"	TEXT,
+	FOREIGN KEY("user_id") REFERENCES "user"("id"),
+	PRIMARY KEY("id" AUTOINCREMENT)
     );''';

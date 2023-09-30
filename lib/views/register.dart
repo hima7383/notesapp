@@ -4,8 +4,8 @@ import 'package:diaryx/components/mytextfield.dart';
 import 'package:diaryx/constants/routs.dart';
 import 'package:diaryx/services/auth/auth_exceptions.dart';
 import 'package:diaryx/services/auth/auth_service.dart';
-import 'package:diaryx/utilites/errordialogs.dart';
-import 'package:diaryx/utilites/noticedialog.dart';
+import 'package:diaryx/utilites/dialogs/errordialogs.dart';
+import 'package:diaryx/utilites/dialogs/noticedialog.dart';
 import 'package:diaryx/views/emailverify.dart';
 import 'package:flutter/material.dart';
 
@@ -73,6 +73,8 @@ class _MyWidgetState extends State<RegisterationView> {
                     context,
                     "Weak password",
                   );
+                } on EmailAlreadyInUseAuthException {
+                  showError(context, 'Email is already in use');
                 } on InvalidEmailAuthException {
                   showError(
                     context,

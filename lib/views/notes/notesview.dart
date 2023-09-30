@@ -1,6 +1,8 @@
 import 'package:diaryx/constants/routs.dart';
 import 'package:diaryx/services/auth/auth_service.dart';
 import 'package:diaryx/services/crud/notes_services.dart';
+import 'package:diaryx/utilites/dialogs/logout_dialog.dart';
+import 'package:diaryx/views/notes/notes_list_view.dart';
 import 'package:flutter/material.dart';
 
 enum Popupmenuaction {
@@ -35,7 +37,7 @@ class _NotesviewState extends State<Notesview> {
             onSelected: (value) async {
               switch (value) {
                 case Popupmenuaction.logout:
-                  final userlogout = await showlogOutdialog(context);
+                  final userlogout = await showLogOutDialog(context);
                   if (userlogout) {
                     await AuthService.firebase().logOut();
                     Navigator.of(context)
@@ -65,21 +67,11 @@ class _NotesviewState extends State<Notesview> {
                     case ConnectionState.active:
                       if (snapshot.hasData) {
                         final allNotes = snapshot.data as List<DatabaseNotes>;
-                        return ListView.builder(
-                          padding: const EdgeInsets.all(0),
-                          itemCount: allNotes.length,
-                          itemBuilder: (context, index) {
-                            final note = allNotes[index];
-                            return ListTile(
-                              title: Text(
-                                note.text,
-                                maxLines: 1,
-                                softWrap: true,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            );
-                          },
-                        );
+                        return NotesListView(
+                            notes: allNotes,
+                            onDeleteNote: ((note) async {
+                              await _notesService.deleteNote(id: note.id);
+                            }));
                       } else {
                         return const CircularProgressIndicator();
                       }
@@ -103,28 +95,4 @@ class _NotesviewState extends State<Notesview> {
       backgroundColor: Colors.grey.shade300,
     );
   }
-}
-
-Future<bool> showlogOutdialog(BuildContext context) {
-  return showDialog(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        title: const Text("Sign out"),
-        content: const Text("Are you sure you want to sign out?"),
-        actions: [
-          TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(false);
-              },
-              child: const Text("Cancel")),
-          TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(true);
-              },
-              child: const Text("Logout"))
-        ],
-      );
-    },
-  ).then((value) => value ?? false);
 }

@@ -6,7 +6,7 @@ import 'package:diaryx/components/mytextfield.dart';
 import 'package:diaryx/constants/routs.dart';
 import 'package:diaryx/services/auth/auth_exceptions.dart';
 import 'package:diaryx/services/auth/auth_service.dart';
-import 'package:diaryx/utilites/errordialogs.dart';
+import 'package:diaryx/utilites/dialogs/errordialogs.dart';
 import 'package:flutter/material.dart';
 
 class LoginView extends StatefulWidget {

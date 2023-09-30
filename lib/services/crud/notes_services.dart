@@ -44,10 +44,13 @@ class NotesService {
     await _ensureDbIsOpen();
     final db = _getDataBaseorThrow();
     await getNote(id: note.id);
-    final updateCount = await db.update(notesTable, {
-      textCol: text,
-      isSyncedWithCloudCol: 0,
-    });
+    final updateCount = await db.update(
+        notesTable,
+        {
+          textCol: text,
+        },
+        where: 'id = ?',
+        whereArgs: [note.id]);
     if (updateCount == 0) {
       throw CouldNoteUpdateNotes;
     } else {
@@ -124,7 +127,6 @@ class NotesService {
     final noteid = await db.insert(notesTable, {
       userIdCol: owner.id,
       textCol: text,
-      isSyncedWithCloudCol: 1,
     });
     final note = DatabaseNotes(
       id: noteid,

@@ -1,15 +1,16 @@
 import 'package:diaryx/services/auth/auth_service.dart';
+import 'package:diaryx/utilites/generics/get_Arguments.dart';
 import 'package:flutter/material.dart';
 import 'package:diaryx/services/crud/notes_services.dart';
 
-class NewNoteView extends StatefulWidget {
-  const NewNoteView({super.key});
+class CreateUpdateNoteView extends StatefulWidget {
+  const CreateUpdateNoteView({super.key});
 
   @override
-  State<NewNoteView> createState() => _NewNoteViewState();
+  State<CreateUpdateNoteView> createState() => _CreateUpdateNoteViewState();
 }
 
-class _NewNoteViewState extends State<NewNoteView> {
+class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
   DatabaseNotes? _note;
   late final NotesService _notesService;
   late final TextEditingController _textControler;
@@ -38,7 +39,16 @@ class _NewNoteViewState extends State<NewNoteView> {
     _textControler.addListener(_textControllerListener);
   }
 
-  Future<DatabaseNotes> createNewNote() async {
+  //create or update notes
+
+  Future<DatabaseNotes> createOrGetExistingNote(BuildContext context) async {
+    final widgetNote = context.getArgument<DatabaseNotes>();
+
+    if (widgetNote != null) {
+      _note = widgetNote;
+      _textControler.text = widgetNote.text;
+      return widgetNote;
+    }
     final exictingnote = _note;
     if (exictingnote != null) {
       return exictingnote;
@@ -46,8 +56,12 @@ class _NewNoteViewState extends State<NewNoteView> {
     final currentUser = AuthService.firebase().currentUser!;
     final email = currentUser.email!;
     final owner = await _notesService.getUser(email: email);
-    return await _notesService.createNote(owner: owner);
+    final newNote = await _notesService.createNote(owner: owner);
+    _note = newNote;
+    return newNote;
   }
+
+// if text empty then delete
 
   void _deletNoteIfTextIsEmpty() {
     final note = _note;
@@ -55,6 +69,8 @@ class _NewNoteViewState extends State<NewNoteView> {
       _notesService.deleteNote(id: note.id);
     }
   }
+
+// automatice save
 
   void _saveNoteIfTextNotEmpty() async {
     final note = _note;
@@ -87,11 +103,10 @@ class _NewNoteViewState extends State<NewNoteView> {
         title: const Text("New Note"),
       ),
       body: FutureBuilder(
-        future: createNewNote(),
+        future: createOrGetExistingNote(context),
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.done:
-              _note = snapshot.data;
               _setipTextControllerListener();
               return TextField(
                 controller: _textControler,

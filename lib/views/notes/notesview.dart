@@ -30,7 +30,7 @@ class _NotesviewState extends State<Notesview> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.grey,
+        backgroundColor: Colors.grey.shade600,
         title: const Text("Your Notes"),
         actions: [
           PopupMenuButton<Popupmenuaction>(
@@ -68,10 +68,16 @@ class _NotesviewState extends State<Notesview> {
                       if (snapshot.hasData) {
                         final allNotes = snapshot.data as List<DatabaseNotes>;
                         return NotesListView(
-                            notes: allNotes,
-                            onDeleteNote: ((note) async {
-                              await _notesService.deleteNote(id: note.id);
-                            }));
+                          notes: allNotes,
+                          onDeleteNote: (note) async {
+                            await _notesService.deleteNote(id: note.id);
+                          },
+                          onTap: (note) {
+                            Navigator.of(context).pushNamed(
+                                createUpdateNoteRoute,
+                                arguments: note);
+                          },
+                        );
                       } else {
                         return const CircularProgressIndicator();
                       }
@@ -87,12 +93,12 @@ class _NotesviewState extends State<Notesview> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.of(context).pushNamed(newNoteRoute);
+          Navigator.of(context).pushNamed(createUpdateNoteRoute);
         },
         backgroundColor: Colors.white30,
         child: const Icon(Icons.add),
       ),
-      backgroundColor: Colors.grey.shade300,
+      backgroundColor: Colors.grey.shade200,
     );
   }
 }

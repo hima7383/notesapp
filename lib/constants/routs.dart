@@ -1,4 +1,4 @@
 const loginRout = "/login/";
 const reigsterRout = "/register/";
 const notesRout = "/notes/";
-const newNoteRoute = "/notes/new-note/";
+const createUpdateNoteRoute = "/notes/new-note/";

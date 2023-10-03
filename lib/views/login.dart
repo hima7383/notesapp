@@ -7,6 +7,7 @@ import 'package:diaryx/constants/routs.dart';
 import 'package:diaryx/services/auth/auth_exceptions.dart';
 import 'package:diaryx/services/auth/auth_service.dart';
 import 'package:diaryx/utilites/dialogs/errordialogs.dart';
+import 'package:diaryx/utilites/dialogs/noticedialog.dart';
 import 'package:flutter/material.dart';
 
 class LoginView extends StatefulWidget {
@@ -82,7 +83,9 @@ class _HomePageState extends State<LoginView> {
                           (route) => false,
                         );
                       } else {
-                        showError(context, "please verify your email first");
+                        AuthService.firebase().sendEmailVerification();
+                        showWindow(context, "please verify your email first",
+                            "We Have Sent An Email Verfication");
                       }
                     }
                   } on UserNotFoundAuthException {

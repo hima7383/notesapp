@@ -1,11 +1,17 @@
 import 'dart:async';
+import 'package:diaryx/extensions/lists/filter.dart';
 import 'package:diaryx/services/crud/crud_exceptions.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' show join;
 import 'package:sqflite/sqflite.dart';
 
 class NotesService {
+  DatabaseUser? _user;
+
   Database? _db;
+
+  List<DatabaseNotes> _notes = [];
+
   static final NotesService _shared = NotesService._sharedInstance();
   NotesService._sharedInstance() {
     _notesStreamController =
@@ -15,18 +21,35 @@ class NotesService {
   }
   factory NotesService() => _shared;
 
-  List<DatabaseNotes> _notes = [];
-
   late final StreamController<List<DatabaseNotes>> _notesStreamController;
 
-  Stream<List<DatabaseNotes>> get allNotes => _notesStreamController.stream;
+  Stream<List<DatabaseNotes>> get allNotes =>
+      _notesStreamController.stream.filter(
+        (note) {
+          final currrentuser = _user;
+          if (currrentuser != null) {
+            return note.userID == currrentuser.id;
+          } else {
+            throw UserShouldBeSetBeForeReadingAllNotes();
+          }
+        },
+      );
 
-  Future<DatabaseUser> getOrCreateUser({required String email}) async {
+  Future<DatabaseUser> getOrCreateUser({
+    required String email,
+    bool setAsCurrentUser = true,
+  }) async {
     try {
       final user = await getUser(email: email);
+      if (setAsCurrentUser) {
+        _user = user;
+      }
       return user;
     } on CouldNotFindUser {
-      final createdUser = createUser(email: email);
+      final createdUser = await createUser(email: email);
+      if (setAsCurrentUser) {
+        _user = createdUser;
+      }
       return createdUser;
     } catch (e) {
       rethrow;

@@ -17,7 +17,7 @@ class NotesListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
+    return ListView.separated(
       padding: const EdgeInsets.all(0),
       itemCount: notes.length,
       itemBuilder: (context, index) {
@@ -32,6 +32,13 @@ class NotesListView extends StatelessWidget {
             softWrap: true,
             overflow: TextOverflow.ellipsis,
           ),
+          leading: CircleAvatar(
+            backgroundColor: const Color(0xff6ae792),
+            child: Text(
+              (index + 1).toString(),
+              style: const TextStyle(color: Colors.black),
+            ),
+          ),
           trailing: IconButton(
             onPressed: () async {
               final shouldDelete = await showDeleteDialog(context);
@@ -41,6 +48,11 @@ class NotesListView extends StatelessWidget {
             },
             icon: const Icon(Icons.delete),
           ),
+        );
+      },
+      separatorBuilder: (context, index) {
+        return const Divider(
+          thickness: 2,
         );
       },
     );

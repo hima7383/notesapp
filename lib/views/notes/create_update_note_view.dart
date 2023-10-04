@@ -94,9 +94,9 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade200,
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.grey,
+        backgroundColor: const Color(0xff6ae792),
         leading: BackButton(
           onPressed: () => Navigator.of(context).pop(),
         ),

@@ -30,7 +30,7 @@ class _NotesviewState extends State<Notesview> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.grey.shade600,
+        backgroundColor: const Color(0xff6ae792),
         title: const Text("Your Notes"),
         actions: [
           PopupMenuButton<Popupmenuaction>(
@@ -98,7 +98,7 @@ class _NotesviewState extends State<Notesview> {
         backgroundColor: Colors.white30,
         child: const Icon(Icons.add),
       ),
-      backgroundColor: Colors.grey.shade200,
+      backgroundColor: Colors.white,
     );
   }
 }

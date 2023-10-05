@@ -4,7 +4,7 @@ import 'package:diaryx/services/cloud/cloud_storage_constants.dart';
 import 'package:diaryx/services/cloud/cloud_storage_exceptions.dart';
 
 class FirebaseCloudStorage {
-  final notes = FirebaseFirestore.instance.collection("notes");
+  final notes = FirebaseFirestore.instance.collection('notes');
 
   Future<void> deleteNote({required String decumentId}) async {
     try {
@@ -37,23 +37,25 @@ class FirebaseCloudStorage {
             isEqualTo: ownerUserId,
           )
           .get()
-          .then((value) => value.docs.map((docs) {
-                return CloudNote(
-                  documentId: docs.id,
-                  ownerUserId: docs.data()[ownerUserIdFieldName] as String,
-                  text: docs.data()[textFeildName] as String,
-                );
-              }));
+          .then((value) => value.docs.map(
+                (docs) => CloudNote.fromSnapshot(docs),
+              ));
     } catch (e) {
       throw CouldNotGetNoteException();
     }
   }
 
-  void createNewNote({required String ownerUserId}) async {
-    await notes.add({
+  Future<CloudNote> createNewNote({required String ownerUserId}) async {
+    final document = await notes.add({
       ownerUserIdFieldName: ownerUserId,
       textFeildName: '',
     });
+    final fetchnote = await document.get();
+    return CloudNote(
+      documentId: fetchnote.id,
+      ownerUserId: ownerUserId,
+      text: '',
+    );
   }
 
   static final FirebaseCloudStorage _shared =

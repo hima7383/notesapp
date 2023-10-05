@@ -1,4 +1,4 @@
-import 'dart:async';
+/*import 'dart:async';
 import 'package:diaryx/extensions/lists/filter.dart';
 import 'package:diaryx/services/crud/crud_exceptions.dart';
 import 'package:path_provider/path_provider.dart';
@@ -322,3 +322,4 @@ const createnote = '''CREATE TABLE IF NOT EXISTS "notes" (
 	FOREIGN KEY("user_id") REFERENCES "user"("id"),
 	PRIMARY KEY("id" AUTOINCREMENT)
     );''';
+*/

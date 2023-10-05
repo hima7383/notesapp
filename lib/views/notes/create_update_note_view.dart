@@ -1,8 +1,10 @@
 import 'package:diaryx/services/auth/auth_service.dart';
+import 'package:diaryx/utilites/dialogs/cannot_share_empty_note_dialog.dart';
 import 'package:diaryx/utilites/generics/get_Arguments.dart';
 import 'package:flutter/material.dart';
 import 'package:diaryx/services/cloud/cloud_note.dart';
 import 'package:diaryx/services/cloud/firebase_cloud_storage.dart';
+import 'package:share_plus/share_plus.dart';
 
 class CreateUpdateNoteView extends StatefulWidget {
   const CreateUpdateNoteView({super.key});
@@ -98,6 +100,18 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: const Color(0xff6ae792),
+        actions: [
+          IconButton(
+              onPressed: () async {
+                final text = _textControler.text;
+                if (_note == null || text.isEmpty) {
+                  await showCannotShareEmptyNoteDialog(context);
+                } else {
+                  Share.share(text);
+                }
+              },
+              icon: const Icon(Icons.share)),
+        ],
         leading: BackButton(
           onPressed: () => Navigator.of(context).pop(),
         ),

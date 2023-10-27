@@ -1,10 +1,15 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:diaryx/constants/routs.dart';
 import 'package:diaryx/services/auth/auth_service.dart';
+import 'package:diaryx/services/auth/bloc/auth_bloc.dart';
+import 'package:diaryx/services/auth/bloc/auth_events.dart';
 import 'package:diaryx/services/cloud/cloud_note.dart';
 import 'package:diaryx/services/cloud/firebase_cloud_storage.dart';
 import 'package:diaryx/utilites/dialogs/logout_dialog.dart';
 import 'package:diaryx/views/notes/notes_list_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 enum Popupmenuaction {
   logout;
@@ -40,9 +45,7 @@ class _NotesviewState extends State<Notesview> {
                 case Popupmenuaction.logout:
                   final userlogout = await showLogOutDialog(context);
                   if (userlogout) {
-                    await AuthService.firebase().logOut();
-                    Navigator.of(context)
-                        .pushNamedAndRemoveUntil("/login/", (_) => false);
+                    context.read<AuthBloc>().add(const AuthEventsLogOut());
                   }
               }
             },

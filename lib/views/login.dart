@@ -5,10 +5,13 @@ import 'dart:developer';
 import 'package:diaryx/components/mytextfield.dart';
 import 'package:diaryx/constants/routs.dart';
 import 'package:diaryx/services/auth/auth_exceptions.dart';
-import 'package:diaryx/services/auth/auth_service.dart';
+
+import 'package:diaryx/services/auth/bloc/auth_bloc.dart';
+import 'package:diaryx/services/auth/bloc/auth_events.dart';
 import 'package:diaryx/utilites/dialogs/errordialogs.dart';
 import 'package:diaryx/utilites/dialogs/noticedialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -74,20 +77,8 @@ class _HomePageState extends State<LoginView> {
                   final p = pass.text.trim();
                   log(e);
                   try {
-                    await AuthService.firebase().logIn(email: e, password: p);
-                    final user = AuthService.firebase().currentUser;
-                    if (user != null) {
-                      if (user.isEmailVerfied) {
-                        Navigator.of(context).pushNamedAndRemoveUntil(
-                          notesRout,
-                          (route) => false,
-                        );
-                      } else {
-                        AuthService.firebase().sendEmailVerification();
-                        showWindow(context, "please verify your email first",
-                            "We Have Sent An Email Verfication");
-                      }
-                    }
+                    context.read<AuthBloc>().add(AuthEventLogIn(e, p));
+                    // i used to send emeil verfy if usr cicks on login button and he isn't logged in
                   } on UserNotFoundAuthException {
                     await showError(
                       context,

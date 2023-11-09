@@ -1,15 +1,13 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'dart:developer';
-
 import 'package:diaryx/components/mytextfield.dart';
 import 'package:diaryx/constants/routs.dart';
 import 'package:diaryx/services/auth/auth_exceptions.dart';
 
 import 'package:diaryx/services/auth/bloc/auth_bloc.dart';
 import 'package:diaryx/services/auth/bloc/auth_events.dart';
+import 'package:diaryx/services/auth/bloc/auth_state.dart';
 import 'package:diaryx/utilites/dialogs/errordialogs.dart';
-import 'package:diaryx/utilites/dialogs/noticedialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -71,36 +69,34 @@ class _HomePageState extends State<LoginView> {
                   hinttext: "Enter your Password",
                   obsecuretext: true),
               const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () async {
-                  final e = email.text.trim();
-                  final p = pass.text.trim();
-                  log(e);
-                  try {
-                    context.read<AuthBloc>().add(AuthEventLogIn(e, p));
-                    // i used to send emeil verfy if usr cicks on login button and he isn't logged in
-                  } on UserNotFoundAuthException {
-                    await showError(
-                      context,
-                      "User not found",
-                    );
-                  } on WrongPasswordAuthException {
-                    await showError(
-                      context,
-                      "Wrong password",
-                    );
-                  } on GenericAuthException {
-                    await showError(context, "Authentication Eror");
+              BlocListener<AuthBloc, AuthState>(
+                listener: (context, state) async {
+                  if (state is AuthStateLoggedOut) {
+                    if (state.exception is UserNotFoundAuthException) {
+                      await showError(context, "User Not Found");
+                    } else if (state.exception is WrongPasswordAuthException) {
+                      await showError(context, "Wrong Crdentails");
+                    } else if (state.exception is GenericAuthException) {
+                      await showError(context, "Authentacion Error");
+                    }
                   }
                 },
-                style: TextButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0)),
-                    backgroundColor: Colors.black,
-                    fixedSize: const Size(300, 50)),
-                child: const Text(
-                  "Login",
-                  style: TextStyle(color: Colors.white),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    final e = email.text.trim();
+                    final p = pass.text.trim();
+
+                    context.read<AuthBloc>().add(AuthEventLogIn(e, p));
+                  },
+                  style: TextButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0)),
+                      backgroundColor: Colors.black,
+                      fixedSize: const Size(300, 50)),
+                  child: const Text(
+                    "Login",
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               ),
               TextButton(

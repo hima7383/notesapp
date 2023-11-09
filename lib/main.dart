@@ -1,5 +1,4 @@
 import 'package:diaryx/constants/routs.dart';
-import 'package:diaryx/services/auth/auth_service.dart';
 import 'package:diaryx/services/auth/bloc/auth_bloc.dart';
 import 'package:diaryx/services/auth/bloc/auth_events.dart';
 import 'package:diaryx/services/auth/bloc/auth_state.dart';

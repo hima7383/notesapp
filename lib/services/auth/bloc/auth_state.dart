@@ -1,5 +1,4 @@
 import 'package:diaryx/services/auth/auth_user.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 @immutable
@@ -16,13 +15,9 @@ class AuthStateLoggedin extends AuthState {
   const AuthStateLoggedin(this.user);
 }
 
-class AuthStateLoginFailuer extends AuthState {
-  final Exception exception;
-  const AuthStateLoginFailuer(this.exception);
-}
-
 class AuthStateLoggedOut extends AuthState {
-  const AuthStateLoggedOut();
+  final Exception? exception;
+  const AuthStateLoggedOut(this.exception);
 }
 
 class AuthStateLogOutFailuer extends AuthState {

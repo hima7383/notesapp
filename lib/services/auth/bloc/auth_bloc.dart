@@ -10,7 +10,7 @@ class AuthBloc extends Bloc<AuthEvents, AuthState> {
       await providor.initializer();
       final user = providor.currentUser;
       if (user == null) {
-        emit(const AuthStateLoggedOut());
+        emit(const AuthStateLoggedOut(null));
       } else if (!user.isEmailVerfied) {
         emit(const AuthStateNeedsVerfication());
       } else {
@@ -19,7 +19,6 @@ class AuthBloc extends Bloc<AuthEvents, AuthState> {
     });
     // handling logging in
     on<AuthEventLogIn>((event, emit) async {
-      emit(const AuthStateLoading());
       final email = event.email;
       final password = event.password;
       try {
@@ -29,7 +28,7 @@ class AuthBloc extends Bloc<AuthEvents, AuthState> {
         );
         emit(AuthStateLoggedin(user));
       } on Exception catch (e) {
-        emit(AuthStateLoginFailuer(e));
+        emit(AuthStateLoggedOut(e));
       }
     });
     // handling logout
@@ -37,7 +36,7 @@ class AuthBloc extends Bloc<AuthEvents, AuthState> {
       emit(const AuthStateLoading());
       try {
         await providor.logOut();
-        emit(const AuthStateLoggedOut());
+        emit(const AuthStateLoggedOut(null));
       } on Exception catch (e) {
         emit(AuthStateLogOutFailuer(e));
       }
